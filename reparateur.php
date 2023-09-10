@@ -1,31 +1,22 @@
-<?php  
+<?php
+    echo"<meta charset='UTF_8'/>";                              
+    include("connexion.php");
+    $conn= se_connecter( "projetsteg");   
 
-    include("connexion.php");                                     
-    $conn= se_connecter( "projetsteg");                                   
-   
+    $_SESSION['ref'] = $_GET['var'];
+    $id = $_SESSION['ref'];
 
-    if($_GET['var']){
+    $req = "select * from user where id= $id";
+    $result = $conn->query($req);
 
-        $_SESSION['ref'] = $_GET['var'];
-        $id = $_SESSION['ref'];
-        $req = "select * from user where id= $id";
-        $result = $conn->query($req);
-        $lig=$result->fetchObject();
-        $nom=$lig->name;
-        $prenom=$lig->prenom;
-        $email=$lig->email;
-        $tel=$lig->tel;
-        $pass=$lig->motdepasse;
-        $role=$lig->role;
-    }
-   
-    
-    $requette="select * from user ";
+    $lig=$result->fetchObject();
+    $nom=$lig->name;
+    $prenom=$lig->prenom;
+    $email=$lig->email;
+
+    $requette="select * from demande ";
     $resultat=$conn->query($requette);
-        if(!$resultat){
-                    echo"lecture impossible";
-        }
-    ?>
+?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 
@@ -141,7 +132,7 @@
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="m-l-5 font-medium d-none d-sm-inline-block">  <?php echo $nom.' '.$prenom; ?> <i class="mdi mdi-chevron-down"></i></span>
+                                <span class="m-l-5 font-medium d-none d-sm-inline-block"><?php echo $nom.' '.$prenom; ?>  <i class="mdi mdi-chevron-down"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                 <span class="with-arrow">
@@ -151,7 +142,7 @@
                                     <div class="">
                                     </div>
                                     <div class="m-l-10">
-                                        <h10 class="m-b-0"><?php echo $nom.' '.$prenom; ?></h10>
+                                        <h4 class="m-b-0"><?php echo $nom.' '.$prenom; ?> </h4>
                                         <p class=" m-b-0"><?php echo $email?></p>
                                     </div>
                                 </div>
@@ -181,18 +172,10 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href='acceuil.php?var=<?php echo $id?>' aria-expanded="false">
-                                <i class="m-r-10 mdi mdi-account"></i>
-                                <span class="hide-menu">Membres</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="demande.php?var=<?php echo $id?>" aria-expanded="false">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="reparateur.php?var=<?php echo $id?>" aria-expanded="false">
                                 <i class="mdi mdi-cube-send"></i>
-                                <span class="hide-menu m-l-10">Demandes</span>
+                                <span class="hide-menu">Demandes</span>
                             </a>
                         </li>
 
@@ -221,52 +204,78 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-            <div class="container-fluid">
+            <span class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <!-- Column -->
                         <div class="card">
                         <div class="card-body">
-                                <h4 style='color:#7A7172' class="card-title">Liste des membres
-
-                                <a href='ajouter.php?var=<?php echo $id?>' style="float:right ; margin-bottom:7px" class="btn btn-primary">ajouter</a>
-                                </h4>
-                                
+                                <h4 class="card-title">Liste des demandes
+                                </h4>            
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table  class="table">
                                         <thead>
                                             <tr>
                                                 <th scope="col">ID</th>
-                                                <th scope="col">Nom</th>
-                                                <th scope="col">Prenom</th>
-                                                <th scope="col">Télèphone</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Mot de passe</th>
-                                                <th scope="col">Role</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col">Titre</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Nom appareil</th>
+                                                <th scope="col">Marque</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Etat</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php                                    
+                                        <?php
                                         if($resultat){
                                             $nbreproduits=$resultat->rowCount();
-                                            $ligne=$resultat->fetchObject();                                                            
-                                            do{
-                                                echo"<tr><td>",$ligne->id,
-                                                    "</td><td>",utf8_encode($ligne->name),"</td><td>",
-                                                    utf8_encode($ligne->prenom),"</td><td>"
-                                                    ,utf8_encode($ligne->tel),"</td><td>",utf8_encode($ligne->email),"</td><td>",utf8_encode($ligne->motdepasse),"</td><td>",$ligne->role,"</td><td> 
-                                            <a href='modifier.php?var=$ligne->id' style='color:blue;font-size:15px;' class='btnnavcolor'><i class='fas fa-edit'></i></a>   
-                                            <a href='supprimer.php?var= $id; &id= $ligne->id; ?>' style='color:red;font-size:15px;' class='btnnavcolor'><i class='fas fa-trash'></i></a> 
-                                            </td><tr>";
+                                            $ligne=$resultat->fetchObject();        
+                                                    do{
+                                                        echo"<tr><td>",utf8_encode($ligne->id),
+                                                        "</td><td>",utf8_encode($ligne->title),"</td><td>",
+                                                        utf8_encode($ligne->desciption),"</td><td>"
+                                                        ,utf8_encode($ligne->nomappareil),"</td><td>",utf8_encode($ligne->marque),"</td><td>",$ligne->date,
+                                                        '</td><td style="
+                                                        width: 260px;
+                                                    "><form action="reparateur.php?var=',$id ,'" method="post" ><div class="row"><div class="col-6"><select height="5px" name="etat" class="form-control custom-select">
+                                                        <option disabled autofocus>--Selectionner un état-- <?php echo $id?></option>';
+                                                       
+                                                        echo '<option  value="terminée" >terminée</option>';       
+                                                        echo '<option  value="à faire" >à faire</option>';       
+                                                            
+                                                           echo '</select> </div>
+                                                            <div class="col-6">
+                                                  
+                                                            <button name="botton" type="submit" class="btn btn-success">Enregister</button>
+                                                       
+                                                            </div> </form> </td> </tr>';
+                                                        
+                                                        
+                                                    }
+                                                while( $ligne=$resultat->fetchObject());
+                                             
+                                                echo"</table>";
+                                                if(isset($_POST['botton']))
+                                                {       $conn= se_connecter( "projetsteg");   
+                                                    
+                                                        $etat=$_POST['etat'];
+                                                      // echo $_POST['etat'];
+                                                        $id = $_SESSION['ref'];
+                                                        if( $etat == 'terminée' ){
+                                                            $etatt = 1;
+                                                        }
+                                                        if( $etat == 'à faire' ){
+                                                            $etatt = 0;
+                                                        }
+                                                    
+                                                        $requette="update demande set etat=  $etatt  where id=11";
+                                                        $nbrlignes=$conn->exec($requette);
+                                                       
+                                                }
+                                               
                                             }
-                                            while( $ligne=$resultat->fetchObject());
-                                            echo"</table>";
-                                            $resultat->closeCursor();
-                                            $conn=null;
-                                            }     
+                                        
                                         ?>
-                                 
                                         </tbody>
                                     </table>
                                 </div>
@@ -275,14 +284,14 @@
                         
                     </div>
                 </div>
-            </div>
+            </span>
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-           
+        
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->
@@ -291,13 +300,13 @@
         <!-- End Page wrapper  -->
         <!-- ============================================================== -->
     </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- customizer Panel -->
-    <!-- ============================================================== -->
-   
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- customizer Panel -->
+<!-- ============================================================== -->
+                                                    
     <div class="chat-windows"></div>
     <!-- ============================================================== -->
     <!-- All Jquery -->

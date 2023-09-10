@@ -4,7 +4,7 @@
     $conn= se_connecter( "projetsteg");                                   
    
 
-    if($_GET['var']){
+   
 
         $_SESSION['ref'] = $_GET['var'];
         $id = $_SESSION['ref'];
@@ -17,10 +17,10 @@
         $tel=$lig->tel;
         $pass=$lig->motdepasse;
         $role=$lig->role;
-    }
+  
    
     
-    $requette="select * from user ";
+    $requette="select * from demande";
     $resultat=$conn->query($requette);
         if(!$resultat){
                     echo"lecture impossible";
@@ -28,7 +28,6 @@
     ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,7 +49,6 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-
 <body>
     <div id="main-wrapper">
         <!-- ============================================================== -->
@@ -132,7 +130,7 @@
                         <!-- ============================================================== -->
                         <!-- Comment -->
                         <!-- ============================================================== -->
-                       
+                      
                         <!-- ============================================================== -->
                         <!-- End Comment -->
                         <!-- ============================================================== -->
@@ -141,17 +139,15 @@
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="m-l-5 font-medium d-none d-sm-inline-block">  <?php echo $nom.' '.$prenom; ?> <i class="mdi mdi-chevron-down"></i></span>
+                                <span class="m-l-5 font-medium d-none d-sm-inline-block"><?php echo $nom.' '.$prenom; ?><i class="mdi mdi-chevron-down"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                 <span class="with-arrow">
                                     <span class="bg-primary"></span>
                                 </span>
                                 <div class="d-flex no-block align-items-center p-15 bg-primary text-white m-b-10">
-                                    <div class="">
-                                    </div>
                                     <div class="m-l-10">
-                                        <h10 class="m-b-0"><?php echo $nom.' '.$prenom; ?></h10>
+                                        <h4 class="m-b-0"><?php echo $nom.' '.$prenom; ?></h4>
                                         <p class=" m-b-0"><?php echo $email?></p>
                                     </div>
                                 </div>
@@ -181,21 +177,12 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href='acceuil.php?var=<?php echo $id?>' aria-expanded="false">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href='accueilagent.php?var=<?php echo $id?>' aria-expanded="false">
                                 <i class="m-r-10 mdi mdi-account"></i>
-                                <span class="hide-menu">Membres</span>
+                                <span class="hide-menu">Demandes</span>
                             </a>
                         </li>
-
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="demande.php?var=<?php echo $id?>" aria-expanded="false">
-                                <i class="mdi mdi-cube-send"></i>
-                                <span class="hide-menu m-l-10">Demandes</span>
-                            </a>
-                        </li>
-
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -212,8 +199,7 @@
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-               
+            <div class="page-breadcrumb">    
             </div>
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
@@ -227,52 +213,43 @@
                         <!-- Column -->
                         <div class="card">
                         <div class="card-body">
-                                <h4 style='color:#7A7172' class="card-title">Liste des membres
-
-                                <a href='ajouter.php?var=<?php echo $id?>' style="float:right ; margin-bottom:7px" class="btn btn-primary">ajouter</a>
-                                </h4>
-                                
+                                <h4 class="card-title">Liste des demandes
+                                <a href='agent.php?var=<?php echo $id?>' style="float:right ; margin-bottom:7px" class="btn btn-primary">ajouter</a>
+                                </h4>                        
                                 <div class="table-responsive">
                                     <table class="table">
-                                        <thead>
                                             <tr>
                                                 <th scope="col">ID</th>
-                                                <th scope="col">Nom</th>
-                                                <th scope="col">Prenom</th>
-                                                <th scope="col">Télèphone</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Mot de passe</th>
-                                                <th scope="col">Role</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col">Titre</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Nom appareil</th>
+                                                <th scope="col">Marque</th>
+                                                <th scope="col">Date</th>
                                             </tr>
-                                        </thead>
                                         <tbody>
                                         <?php                                    
                                         if($resultat){
                                             $nbreproduits=$resultat->rowCount();
-                                            $ligne=$resultat->fetchObject();                                                            
+                                            $ligne=$resultat->fetchObject();   
+                                            if($ligne->idagent ==  $id)    {                                                  
                                             do{
                                                 echo"<tr><td>",$ligne->id,
-                                                    "</td><td>",utf8_encode($ligne->name),"</td><td>",
-                                                    utf8_encode($ligne->prenom),"</td><td>"
-                                                    ,utf8_encode($ligne->tel),"</td><td>",utf8_encode($ligne->email),"</td><td>",utf8_encode($ligne->motdepasse),"</td><td>",$ligne->role,"</td><td> 
-                                            <a href='modifier.php?var=$ligne->id' style='color:blue;font-size:15px;' class='btnnavcolor'><i class='fas fa-edit'></i></a>   
-                                            <a href='supprimer.php?var= $id; &id= $ligne->id; ?>' style='color:red;font-size:15px;' class='btnnavcolor'><i class='fas fa-trash'></i></a> 
-                                            </td><tr>";
+                                                    "</td><td>",utf8_encode($ligne->title),"</td><td>",
+                                                    utf8_encode($ligne->desciption),"</td><td>"
+                                                    ,utf8_encode($ligne->nomappareil),"</td><td>",utf8_encode($ligne->marque),"</td><td>",utf8_encode($ligne->date),"</td><tr>";
                                             }
                                             while( $ligne=$resultat->fetchObject());
+                                        }   
                                             echo"</table>";
                                             $resultat->closeCursor();
                                             $conn=null;
                                             }     
-                                        ?>
-                                 
+                                        ?>    
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                        
+                        </div>          
                     </div>
                 </div>
             </div>

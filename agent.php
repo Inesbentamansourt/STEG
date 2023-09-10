@@ -1,34 +1,43 @@
-<?php  
+<?php
+ include "connexion.php";
+ $cnx = se_connecter("projetsteg");
 
-    include("connexion.php");                                     
-    $conn= se_connecter( "projetsteg");                                   
+  
+ if($_GET['var']){
+
+    $_SESSION['ref'] = $_GET['var'];
+    $id = $_SESSION['ref'];
+    $req = "select * from user where id= $id";
+    $result = $cnx->query($req);
+    $lig=$result->fetchObject();
+    $nom=$lig->name;
+    $prenom=$lig->prenom;
+    $email=$lig->email;
+    $tel=$lig->tel;
+    $pass=$lig->motdepasse;
+    $role=$lig->role;
+}
+
+ if (isset($_POST['botton']))    
+ {
+    $titre = $cnx->quote($_POST['titre']);
+    $description = $cnx->quote($_POST['description']);
+    $type = $cnx->quote($_POST['type']);
+    $marque = $cnx->quote($_POST['marque']);
    
-
-    if($_GET['var']){
-
-        $_SESSION['ref'] = $_GET['var'];
-        $id = $_SESSION['ref'];
-        $req = "select * from user where id= $id";
-        $result = $conn->query($req);
-        $lig=$result->fetchObject();
-        $nom=$lig->name;
-        $prenom=$lig->prenom;
-        $email=$lig->email;
-        $tel=$lig->tel;
-        $pass=$lig->motdepasse;
-        $role=$lig->role;
-    }
+    $date =  $cnx->quote(date("Y-m-j"));
    
-    
-    $requette="select * from user ";
-    $resultat=$conn->query($requette);
-        if(!$resultat){
-                    echo"lecture impossible";
-        }
-    ?>
+    $sql = "INSERT INTO demande  (title,desciption	,nomappareil,idagent,marque,date,etat) VALUES ($titre, $description,$type, $id,$marque,$date,0)";
+    $cnx->exec($sql);
+    //echo $sql;
+    header("Location:accueilagent.php");
+    if($sql){
+        header("Location:accueilagent.php");
+    }  
+}
+?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -132,7 +141,7 @@
                         <!-- ============================================================== -->
                         <!-- Comment -->
                         <!-- ============================================================== -->
-                       
+                   
                         <!-- ============================================================== -->
                         <!-- End Comment -->
                         <!-- ============================================================== -->
@@ -141,17 +150,15 @@
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="m-l-5 font-medium d-none d-sm-inline-block">  <?php echo $nom.' '.$prenom; ?> <i class="mdi mdi-chevron-down"></i></span>
+                                <span class="m-l-5 font-medium d-none d-sm-inline-block"><?php echo $nom.' '.$prenom; ?> <i class="mdi mdi-chevron-down"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                 <span class="with-arrow">
                                     <span class="bg-primary"></span>
                                 </span>
                                 <div class="d-flex no-block align-items-center p-15 bg-primary text-white m-b-10">
-                                    <div class="">
-                                    </div>
                                     <div class="m-l-10">
-                                        <h10 class="m-b-0"><?php echo $nom.' '.$prenom; ?></h10>
+                                        <h4 class="m-b-0"><?php echo $nom.' '.$prenom; ?></h4>
                                         <p class=" m-b-0"><?php echo $email?></p>
                                     </div>
                                 </div>
@@ -181,21 +188,12 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href='acceuil.php?var=<?php echo $id?>' aria-expanded="false">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href='accueilagent.php?var=<?php echo $id?>' aria-expanded="false">
                                 <i class="m-r-10 mdi mdi-account"></i>
-                                <span class="hide-menu">Membres</span>
+                                <span class="hide-menu">Demandes</span>
                             </a>
                         </li>
-
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="demande.php?var=<?php echo $id?>" aria-expanded="false">
-                                <i class="mdi mdi-cube-send"></i>
-                                <span class="hide-menu m-l-10">Demandes</span>
-                            </a>
-                        </li>
-
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -212,8 +210,7 @@
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-               
+            <div class="page-breadcrumb">        
             </div>
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
@@ -227,52 +224,56 @@
                         <!-- Column -->
                         <div class="card">
                         <div class="card-body">
-                                <h4 style='color:#7A7172' class="card-title">Liste des membres
-
-                                <a href='ajouter.php?var=<?php echo $id?>' style="float:right ; margin-bottom:7px" class="btn btn-primary">ajouter</a>
-                                </h4>
-                                
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Nom</th>
-                                                <th scope="col">Prenom</th>
-                                                <th scope="col">Télèphone</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Mot de passe</th>
-                                                <th scope="col">Role</th>
-                                                <th scope="col">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php                                    
-                                        if($resultat){
-                                            $nbreproduits=$resultat->rowCount();
-                                            $ligne=$resultat->fetchObject();                                                            
-                                            do{
-                                                echo"<tr><td>",$ligne->id,
-                                                    "</td><td>",utf8_encode($ligne->name),"</td><td>",
-                                                    utf8_encode($ligne->prenom),"</td><td>"
-                                                    ,utf8_encode($ligne->tel),"</td><td>",utf8_encode($ligne->email),"</td><td>",utf8_encode($ligne->motdepasse),"</td><td>",$ligne->role,"</td><td> 
-                                            <a href='modifier.php?var=$ligne->id' style='color:blue;font-size:15px;' class='btnnavcolor'><i class='fas fa-edit'></i></a>   
-                                            <a href='supprimer.php?var= $id; &id= $ligne->id; ?>' style='color:red;font-size:15px;' class='btnnavcolor'><i class='fas fa-trash'></i></a> 
-                                            </td><tr>";
-                                            }
-                                            while( $ligne=$resultat->fetchObject());
-                                            echo"</table>";
-                                            $resultat->closeCursor();
-                                            $conn=null;
-                                            }     
-                                        ?>
-                                 
-                                        </tbody>
-                                    </table>
+                                <h4 class="card-title">Ajouter une demande</h4>
+                                <form action='agent.php' method='post' >
+                                <div class="form-body">
+                                    <div class="card-body">
+                                        <div class="row pt-3">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">titre</label>
+                                                    <input name="titre" type="text" class="form-control">
+                                                  </div>
+                                            </div>
+                                            <!--/span-->
+                                            <div class="col-md-6">
+                                                <div class="form-group has-danger">
+                                                    <label class="control-label">type du machine</label>
+                                                    <input name="type" type="text"  class="form-control form-control-danger" >
+                                                   </div>
+                                            </div>
+                                            <!--/span-->
+                                        </div>
+                                        <!--/row-->
+                                        <div class="row pt-3">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">description du probème</label>
+                                                    <textarea name="description" type="text"  class="form-control"></textarea>
+                                                  </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">marque</label>
+                                                    <input name="marque" type="text" class="form-control"></input>
+                                                  </div>
+                                            </div>
+                                            <!--/span-->
+                                            
+                                            <!--/span-->
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="card-body">
+                                    </div>
+                                    <div class="form-actions">
+                                        <div class="card-body">
+                                            <button name='botton' type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Enregister</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        
+                                </form>
+                        </div>   
                     </div>
                 </div>
             </div>

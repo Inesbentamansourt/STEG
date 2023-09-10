@@ -32,12 +32,21 @@ $conn= se_connecter();
             
              $_SESSION['login'] = $ligne->login;
 
-            
+             if ($ligne->role== 'responsable')
+             {  
               //  $_SESSION["user"] = "oui";
                     
-                    header("location:acceuil.php");
-               
-                  
+                    header("location:acceuil.php?var=$ligne->id");
+             }  
+             else  if ($ligne->role== 'Agent')
+             {
+              //  $_SESSION["user"] = "oui";
+                    
+                    header("location:accueilagent.php?var=$ligne->id");
+             }
+             else if($ligne->role== 'Reparateur') {
+                header("location:reparateur.php?var=$ligne->id");
+             }       
              exit;
              
           }
@@ -119,8 +128,6 @@ $conn= se_connecter();
                                     <input class="form-control form-control-lg" type="email" required="" placeholder="nom d'utilisateur" required>
                                 </div>
                             </div>
-                      
-                          
                         </form>
                     </div>
                 </div>

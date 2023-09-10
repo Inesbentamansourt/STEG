@@ -1,31 +1,34 @@
-<?php  
+<?php
 
-    include("connexion.php");                                     
-    $conn= se_connecter( "projetsteg");                                   
-   
+    echo"<meta charset='UTF_8'/>";  
+    session_start();                            
+    include("connexion.php");
 
     if($_GET['var']){
+    $conn= se_connecter( "projetsteg");   
 
-        $_SESSION['ref'] = $_GET['var'];
-        $id = $_SESSION['ref'];
-        $req = "select * from user where id= $id";
-        $result = $conn->query($req);
-        $lig=$result->fetchObject();
-        $nom=$lig->name;
-        $prenom=$lig->prenom;
-        $email=$lig->email;
-        $tel=$lig->tel;
-        $pass=$lig->motdepasse;
-        $role=$lig->role;
-    }
-   
-    
-    $requette="select * from user ";
+    $_SESSION['ref'] = $_GET['var'];
+    $id = $_SESSION['ref'];
+
+    $req = "select * from user where id= $id";
+    $result = $conn->query($req);
+
+    $lig=$result->fetchObject();
+    $nom=$lig->name;
+    $prenom=$lig->prenom;
+    $email=$lig->email;
+
+    $requette="select * from demande ";
     $resultat=$conn->query($requette);
-        if(!$resultat){
-                    echo"lecture impossible";
-        }
-    ?>
+
+    
+    $r="select * from user where role= 'Reparateur' ";
+    $rr=$conn->query($r);
+
+}
+
+   
+?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 
@@ -132,7 +135,79 @@
                         <!-- ============================================================== -->
                         <!-- Comment -->
                         <!-- ============================================================== -->
-                       
+                        <!-- <li class="nav-item dropdown border-right">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="mdi mdi-bell-outline font-22"></i>
+                                <span class="badge badge-pill badge-info noti">3</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
+                                <span class="with-arrow">
+                                    <span class="bg-primary"></span>
+                                </span>
+                                <ul class="list-style-none">
+                                    <li>
+                                        <div class="drop-title bg-primary text-white">
+                                            <h4 class="m-b-0 m-t-5">4 New</h4>
+                                            <span class="font-light">Notifications</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="message-center notifications">
+                                          
+                                            <a href="javascript:void(0)" class="message-item">
+                                                <span class="btn btn-danger btn-circle">
+                                                    <i class="fa fa-link"></i>
+                                                </span>
+                                                <div class="mail-contnet">
+                                                    <h5 class="message-title">Luanch Admin</h5>
+                                                    <span class="mail-desc">Just see the my new admin!</span>
+                                                    <span class="time">9:30 AM</span>
+                                                </div>
+                                            </a>
+                                        
+                                            <a href="javascript:void(0)" class="message-item">
+                                                <span class="btn btn-success btn-circle">
+                                                    <i class="ti-calendar"></i>
+                                                </span>
+                                                <div class="mail-contnet">
+                                                    <h5 class="message-title">Event today</h5>
+                                                    <span class="mail-desc">Just a reminder that you have event</span>
+                                                    <span class="time">9:10 AM</span>
+                                                </div>
+                                            </a>
+                                          
+                                            <a href="javascript:void(0)" class="message-item">
+                                                <span class="btn btn-info btn-circle">
+                                                    <i class="ti-settings"></i>
+                                                </span>
+                                                <div class="mail-contnet">
+                                                    <h5 class="message-title">Settings</h5>
+                                                    <span class="mail-desc">You can customize this template as you want</span>
+                                                    <span class="time">9:08 AM</span>
+                                                </div>
+                                            </a>
+                                           
+                                            <a href="javascript:void(0)" class="message-item">
+                                                <span class="btn btn-primary btn-circle">
+                                                    <i class="ti-user"></i>
+                                                </span>
+                                                <div class="mail-contnet">
+                                                    <h5 class="message-title">Pavan kumar</h5>
+                                                    <span class="mail-desc">Just see the my admin!</span>
+                                                    <span class="time">9:02 AM</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-center m-b-5 text-dark" href="javascript:void(0);">
+                                            <strong>Check all notifications</strong>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li> -->
                         <!-- ============================================================== -->
                         <!-- End Comment -->
                         <!-- ============================================================== -->
@@ -141,15 +216,14 @@
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="m-l-5 font-medium d-none d-sm-inline-block">  <?php echo $nom.' '.$prenom; ?> <i class="mdi mdi-chevron-down"></i></span>
+                                <span class="m-l-5 font-medium d-none d-sm-inline-block"><?php echo $nom.' '.$prenom; ?> <i class="mdi mdi-chevron-down"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                 <span class="with-arrow">
                                     <span class="bg-primary"></span>
                                 </span>
                                 <div class="d-flex no-block align-items-center p-15 bg-primary text-white m-b-10">
-                                    <div class="">
-                                    </div>
+                                 
                                     <div class="m-l-10">
                                         <h10 class="m-b-0"><?php echo $nom.' '.$prenom; ?></h10>
                                         <p class=" m-b-0"><?php echo $email?></p>
@@ -181,21 +255,18 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href='acceuil.php?var=<?php echo $id?>' aria-expanded="false">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href='acceuil.php?var=<?php echo $id ?>' aria-expanded="false">
                                 <i class="m-r-10 mdi mdi-account"></i>
                                 <span class="hide-menu">Membres</span>
                             </a>
                         </li>
-
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="demande.php?var=<?php echo $id?>" aria-expanded="false">
                                 <i class="mdi mdi-cube-send"></i>
                                 <span class="hide-menu m-l-10">Demandes</span>
                             </a>
-                        </li>
-
+                        </li>  
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -212,8 +283,7 @@
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-               
+            <div class="page-breadcrumb">      
             </div>
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
@@ -227,46 +297,75 @@
                         <!-- Column -->
                         <div class="card">
                         <div class="card-body">
-                                <h4 style='color:#7A7172' class="card-title">Liste des membres
-
-                                <a href='ajouter.php?var=<?php echo $id?>' style="float:right ; margin-bottom:7px" class="btn btn-primary">ajouter</a>
+                                <h4 class="card-title">Liste des demandes
                                 </h4>
-                                
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table  class="table">
                                         <thead>
                                             <tr>
                                                 <th scope="col">ID</th>
-                                                <th scope="col">Nom</th>
-                                                <th scope="col">Prenom</th>
-                                                <th scope="col">Télèphone</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Mot de passe</th>
-                                                <th scope="col">Role</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col">Titre</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Nom appareil</th>
+                                                <th scope="col">Marque</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">reparateur</th>
+                                                <th scope="col">agent</th>
+                                                <th scope="col">Réparateur</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php                                    
+                                        <?php                               
                                         if($resultat){
                                             $nbreproduits=$resultat->rowCount();
-                                            $ligne=$resultat->fetchObject();                                                            
+                                            $lign=$resultat->fetchObject();                                                            
                                             do{
-                                                echo"<tr><td>",$ligne->id,
-                                                    "</td><td>",utf8_encode($ligne->name),"</td><td>",
-                                                    utf8_encode($ligne->prenom),"</td><td>"
-                                                    ,utf8_encode($ligne->tel),"</td><td>",utf8_encode($ligne->email),"</td><td>",utf8_encode($ligne->motdepasse),"</td><td>",$ligne->role,"</td><td> 
-                                            <a href='modifier.php?var=$ligne->id' style='color:blue;font-size:15px;' class='btnnavcolor'><i class='fas fa-edit'></i></a>   
-                                            <a href='supprimer.php?var= $id; &id= $ligne->id; ?>' style='color:red;font-size:15px;' class='btnnavcolor'><i class='fas fa-trash'></i></a> 
-                                            </td><tr>";
+                                                echo"<tr><td>",$lign->id,
+                                                    "</td><td>",utf8_encode($lign->title),"</td><td>",
+                                                    utf8_encode($lign->desciption),"</td><td>"
+                                                    ,utf8_encode($lign->nomappareil),"</td><td>",utf8_encode($lign->marque),"</td><td>",utf8_encode($lign->date),
+                                                    "</td><td>",utf8_encode($lign->idagent),"</td><td>",utf8_encode($lign->reparateur),
+                                                    
+                                                    "</td><td style='
+                                                    height: 43px;
+                                                    width: 232px;'
+                                                    >",
+                                                    '<form action="demande.php?var=',$id ,'" method="post" ><div class="row"><div class="col-6"><select height="5px" name="reparateur" class="form-control custom-select">
+                                                    <option disabled autofocus>--Selectionner un réparateur-- <?php echo $id?></option>';
+                                                    if($rr){
+                                                        $nbreproduits=$rr->rowCount();
+                                                        $ligne=$rr->fetchObject();  
+                                                        do{
+                                                            echo '<option  value="'.$ligne->id.'" >',  $ligne->name.' '.  $ligne->prenom,'</option>';       
+                                                        }
+                                                        while( $ligne=$rr->fetchObject());      
+                                                       echo '</select> </div>
+                                                        <div class="col-6">
+                                              
+                                                        <button name="botton" type="submit" class="btn btn-success">Enregister</button>
+                                                   
+                                                        </div>  </form> ';
+                                                        if(isset($_POST['botton']))
+                                                        {       $conn= se_connecter( "projetsteg");   
+                                                            
+                                                                $reparateur=$_POST['reparateur'];
+                                                                $id = $_SESSION['ref'];
+                                                            
+                                                                $requette="update demande set reparateur=$reparateur where id='.$ligne->id.'";
+                                                                $nbrlignes=$conn->exec($requette);
+                                                               
+                                                        }
+                                                      
+                                                        }     
+                                                    
+                                                    echo '</td><tr>';
                                             }
                                             while( $ligne=$resultat->fetchObject());
                                             echo"</table>";
                                             $resultat->closeCursor();
                                             $conn=null;
                                             }     
-                                        ?>
-                                 
+                                        ?>                
                                         </tbody>
                                     </table>
                                 </div>
@@ -297,7 +396,6 @@
     <!-- ============================================================== -->
     <!-- customizer Panel -->
     <!-- ============================================================== -->
-   
     <div class="chat-windows"></div>
     <!-- ============================================================== -->
     <!-- All Jquery -->
