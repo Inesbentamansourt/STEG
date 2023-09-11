@@ -309,34 +309,74 @@
                                                 <th scope="col">Nom appareil</th>
                                                 <th scope="col">Marque</th>
                                                 <th scope="col">Date</th>
-                                               
                                                 <th scope="col">agent</th>
-                                               
+                                                <th scope="col">reparateur</th>
+                                                <th scope="col">Réparateur</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php                               
-                                        if($resultat){
-                                            $nbreproduits=$resultat->rowCount();
-                                            $lign=$resultat->fetchObject();   
-                                            if($lign){                                                    
-                                            do{
-                                                echo"<tr><td>",$lign->id,
-                                                    "</td><td>",utf8_encode($lign->title),"</td><td>",
-                                                    utf8_encode($lign->desciption),"</td><td>"
-                                                    ,utf8_encode($lign->nomappareil),"</td><td>",utf8_encode($lign->marque),"</td><td>",utf8_encode($lign->date),
-                                                    "</td><td>",utf8_encode($lign->idagent),"</td><td>",utf8_encode($lign->reparateur),
-                                                    
-                                                    "</td>
-                                                  <tr>";
-                                            }
-                                            while( $lign=$resultat->fetchObject());
-                                            echo"</table>";
-                                            $resultat->closeCursor();
-                                            $conn=null;
-                                            }     
-                                        }     
-                                        ?>                
+                                        <?php
+if ($resultat) {
+    $nbreproduits = $resultat->rowCount();
+    $ligne = $resultat->fetchObject();
+
+    if ($ligne) {
+       
+        // Fetch and loop through users outside of the demand loop
+        $users = []; // Store users
+        if ($rr) {
+            while ($row = $rr->fetchObject()) {
+                $users[] = $row;
+            }
+        }
+
+        do {
+            echo"<tr><td>",$ligne->id,
+            "</td><td>",utf8_encode($ligne->title),"</td><td>",
+            utf8_encode($ligne->desciption),"</td><td>"
+            ,utf8_encode($ligne->nomappareil),"</td><td>",utf8_encode($ligne->marque),"</td><td>",utf8_encode($ligne->date),
+            "</td><td>",utf8_encode($ligne->idagent),"</td><td>",utf8_encode($ligne->reparateur),
+            
+            "</td><td style='
+            height: 43px;
+            width: 232px;'
+            >";
+
+            echo "<form  method='post'>";
+
+            echo "<input type='hidden' name='id' value='" . $ligne->id . "'>";
+            echo" <div class='row'><div class='col-6'><select name='reparateur' class='form-control custom-select'>";
+            echo "<option disabled autofocus>--Sélectionner un réparateur--</option>";
+
+            foreach ($users as $user) {
+                
+                echo '<option value="' . $user->id . '">' . $user->name . ' ' . $user->prenom . '</option>';
+            }
+
+            echo "</select> </div>";
+            echo "<div class='col-6'><button name='botton' type='submit' class='btn btn-success'>Enregistrer</button></div>";
+
+            echo "</form>";
+            echo "</td></tr>";
+            if(isset($_POST['botton']))
+            {                      
+                    $reparateur=$_POST['reparateur'];
+                    $id = $_POST['id'];
+                                        
+
+                    $requette="update demande set reparateur=$reparateur where id= $id";
+                    $nbrlignes=$conn->exec($requette);
+                   
+            }
+        } while ($ligne = $resultat->fetchObject());
+
+        echo "</table>";
+
+        $resultat->closeCursor();
+        $conn = null;
+    }
+}
+?>
                                         </tbody>
                                     </table>
                                 </div>
