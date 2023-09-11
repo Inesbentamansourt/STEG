@@ -30,9 +30,9 @@
     $sql = "INSERT INTO demande  (title,desciption	,nomappareil,idagent,marque,date,etat) VALUES ($titre, $description,$type, $id,$marque,$date,0)";
     $cnx->exec($sql);
     //echo $sql;
-    header("Location:accueilagent.php");
+   // header("Location:accueilagent.php");
     if($sql){
-        header("Location:accueilagent.php");
+        header("Location:accueilagent.php?var=$id ");
     }  
 }
 ?>
@@ -225,7 +225,7 @@
                         <div class="card">
                         <div class="card-body">
                                 <h4 class="card-title">Ajouter une demande</h4>
-                                <form action='agent.php' method='post' >
+                                <form  method='post' >
                                 <div class="form-body">
                                     <div class="card-body">
                                         <div class="row pt-3">

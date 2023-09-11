@@ -256,7 +256,7 @@
                                                     "</td><td>",utf8_encode($ligne->name),"</td><td>",
                                                     utf8_encode($ligne->prenom),"</td><td>"
                                                     ,utf8_encode($ligne->tel),"</td><td>",utf8_encode($ligne->email),"</td><td>",utf8_encode($ligne->motdepasse),"</td><td>",$ligne->role,"</td><td> 
-                                            <a href='modifier.php?var=$ligne->id' style='color:blue;font-size:15px;' class='btnnavcolor'><i class='fas fa-edit'></i></a>   
+                                            <a href='modifier.php?var=$ligne->id; &id= $id;' style='color:blue;font-size:15px;' class='btnnavcolor'><i class='fas fa-edit'></i></a>   
                                             <a href='supprimer.php?var= $id; &id= $ligne->id; ?>' style='color:red;font-size:15px;' class='btnnavcolor'><i class='fas fa-trash'></i></a> 
                                             </td><tr>";
                                             }

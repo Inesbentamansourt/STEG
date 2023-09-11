@@ -309,9 +309,9 @@
                                                 <th scope="col">Nom appareil</th>
                                                 <th scope="col">Marque</th>
                                                 <th scope="col">Date</th>
-                                                <th scope="col">reparateur</th>
+                                               
                                                 <th scope="col">agent</th>
-                                                <th scope="col">Réparateur</th>
+                                               
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -326,41 +326,10 @@
                                                     ,utf8_encode($lign->nomappareil),"</td><td>",utf8_encode($lign->marque),"</td><td>",utf8_encode($lign->date),
                                                     "</td><td>",utf8_encode($lign->idagent),"</td><td>",utf8_encode($lign->reparateur),
                                                     
-                                                    "</td><td style='
-                                                    height: 43px;
-                                                    width: 232px;'
-                                                    >",
-                                                    '<form action="demande.php?var=',$id ,'" method="post" ><div class="row"><div class="col-6"><select height="5px" name="reparateur" class="form-control custom-select">
-                                                    <option disabled autofocus>--Selectionner un réparateur-- <?php echo $id?></option>';
-                                                    if($rr){
-                                                        $nbreproduits=$rr->rowCount();
-                                                        $ligne=$rr->fetchObject();  
-                                                        do{
-                                                            echo '<option  value="'.$ligne->id.'" >',  $ligne->name.' '.  $ligne->prenom,'</option>';       
-                                                        }
-                                                        while( $ligne=$rr->fetchObject());      
-                                                       echo '</select> </div>
-                                                        <div class="col-6">
-                                              
-                                                        <button name="botton" type="submit" class="btn btn-success">Enregister</button>
-                                                   
-                                                        </div>  </form> ';
-                                                        if(isset($_POST['botton']))
-                                                        {       $conn= se_connecter( "projetsteg");   
-                                                            
-                                                                $reparateur=$_POST['reparateur'];
-                                                                $id = $_SESSION['ref'];
-                                                            
-                                                                $requette="update demande set reparateur=$reparateur where id='.$ligne->id.'";
-                                                                $nbrlignes=$conn->exec($requette);
-                                                               
-                                                        }
-                                                      
-                                                        }     
-                                                    
-                                                    echo '</td><tr>';
+                                                    "</td>
+                                                  <tr>";
                                             }
-                                            while( $ligne=$resultat->fetchObject());
+                                            while( $lign=$resultat->fetchObject());
                                             echo"</table>";
                                             $resultat->closeCursor();
                                             $conn=null;

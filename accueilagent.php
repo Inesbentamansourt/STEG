@@ -1,11 +1,9 @@
 <?php  
 
-    include("connexion.php");                                     
+    include("connexion.php");   
+    session_start();                                     
     $conn= se_connecter( "projetsteg");                                   
    
-
-   
-
         $_SESSION['ref'] = $_GET['var'];
         $id = $_SESSION['ref'];
         $req = "select * from user where id= $id";
@@ -230,7 +228,9 @@
                                         <?php                                    
                                         if($resultat){
                                             $nbreproduits=$resultat->rowCount();
-                                            $ligne=$resultat->fetchObject();   
+                                            $ligne=$resultat->fetchObject(); 
+
+                                            if($ligne)    {                                                  
                                             if($ligne->idagent ==  $id)    {                                                  
                                             do{
                                                 echo"<tr><td>",$ligne->id,
@@ -240,6 +240,7 @@
                                             }
                                             while( $ligne=$resultat->fetchObject());
                                         }   
+                                    }   
                                             echo"</table>";
                                             $resultat->closeCursor();
                                             $conn=null;

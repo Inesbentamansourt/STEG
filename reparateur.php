@@ -223,58 +223,67 @@
                                                 <th scope="col">Marque</th>
                                                 <th scope="col">Date</th>
                                                 <th scope="col">Etat</th>
+                                                <th scope="col">etat</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <?php
-                                        if($resultat){
-                                            $nbreproduits=$resultat->rowCount();
-                                            $ligne=$resultat->fetchObject();        
-                                                    do{
-                                                        echo"<tr><td>",utf8_encode($ligne->id),
-                                                        "</td><td>",utf8_encode($ligne->title),"</td><td>",
-                                                        utf8_encode($ligne->desciption),"</td><td>"
-                                                        ,utf8_encode($ligne->nomappareil),"</td><td>",utf8_encode($ligne->marque),"</td><td>",$ligne->date,
-                                                        '</td><td style="
-                                                        width: 260px;
-                                                    "><form action="reparateur.php?var=',$id ,'" method="post" ><div class="row"><div class="col-6"><select height="5px" name="etat" class="form-control custom-select">
-                                                        <option disabled autofocus>--Selectionner un état-- <?php echo $id?></option>';
-                                                       
-                                                        echo '<option  value="terminée" >terminée</option>';       
-                                                        echo '<option  value="à faire" >à faire</option>';       
-                                                            
-                                                           echo '</select> </div>
-                                                            <div class="col-6">
-                                                  
-                                                            <button name="botton" type="submit" class="btn btn-success">Enregister</button>
-                                                       
-                                                            </div> </form> </td> </tr>';
-                                                        
-                                                        
-                                                    }
-                                                while( $ligne=$resultat->fetchObject());
-                                             
-                                                echo"</table>";
-                                                if(isset($_POST['botton']))
-                                                {       $conn= se_connecter( "projetsteg");   
-                                                    
-                                                        $etat=$_POST['etat'];
-                                                      // echo $_POST['etat'];
-                                                        $id = $_SESSION['ref'];
-                                                        if( $etat == 'terminée' ){
-                                                            $etatt = 1;
-                                                        }
-                                                        if( $etat == 'à faire' ){
-                                                            $etatt = 0;
-                                                        }
-                                                    
-                                                        $requette="update demande set etat=  $etatt  where id=11";
-                                                        $nbrlignes=$conn->exec($requette);
-                                                       
-                                                }
-                                               
-                                            }
+                                        if ($resultat) {
+                                            $nbreproduits = $resultat->rowCount();
+                                            $ligne = $resultat->fetchObject();
                                         
+                                            do {
+                                                echo "<tr><td>", utf8_encode($ligne->id),
+                                                    "</td><td>", utf8_encode($ligne->title), "</td><td>",
+                                                    utf8_encode($ligne->desciption), "</td><td>"
+                                                    , utf8_encode($ligne->nomappareil), "</td><td>", utf8_encode($ligne->marque), "</td><td>", $ligne->date,
+                                                    '</td><td style="width: 260px;">
+                                                    <form action="reparateur.php?var=', $id, '" method="post" >
+                                                    <input type="hidden" name="id" value="' . $ligne->id . '">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <select height="5px" name="etat" class="form-control custom-select">
+                                                                <option disabled autofocus>--Sélectionner un état-- </option>';
+                                                                
+                                                                echo '<option>terminée</option>';
+                                                                echo '<option>à faire</option>';
+                                                                    
+                                                                echo '</select>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <button name="botton" type="submit" class="btn btn-success">Enregistrer</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                </td>
+                                                <td>';
+                                                
+                                                // Check the checkbox based on the selected 'etat' from the form
+                                                if ($ligne->etat == true) {
+                                                    echo '<input style="width: 30px; height: 30px;" type="checkbox" checked />';
+                                                } else {
+                                                    echo '<input style="width: 30px; height: 30px;" type="checkbox" />';
+                                                }
+                                                
+                                                echo '</td></tr>';
+                                            } while ($ligne = $resultat->fetchObject());
+                                        
+                                            echo "</table>";
+                                        
+                                            if (isset($_POST['botton'])) {
+                                                $etat = $_POST['etat'];
+                                                $id = $_POST['id'];
+                                        
+                                                if ($etat == 'terminée') {
+                                                    $etatt = 1;
+                                                } elseif ($etat == 'à faire') {
+                                                    $etatt = 0;
+                                                }
+                                        
+                                                $requette = "UPDATE demande SET etat = $etatt WHERE id = $id";
+                                                $nbrlignes = $conn->exec($requette);
+                                            }
+                                        }
                                         ?>
                                         </tbody>
                                     </table>

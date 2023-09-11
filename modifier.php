@@ -2,34 +2,35 @@
  echo "<meta charset='UTF_8'/>";
  session_start();
  include ("connexion.php");
-             
-        if(isset($_POST['botton']))
-        {            
-                $conn = se_connecter("projetsteg");
-                $id = $_SESSION['ref'];
-
-                $nom=$conn->quote($_POST['nom']);
-                $prenom=$conn->quote($_POST['prenom']);
-                $email=$conn->quote($_POST['email']);
-                $tel=$_POST['tel'];
-                $motdepasse=$conn->quote($_POST['pass']);
-                $role=$conn->quote($_POST['role']);
-        
-                //  echo $role;
-                $requette="update user set name=$nom,prenom= $prenom,email=$email,tel=$tel,motdepasse=$motdepasse,role=$role where id=$id";
-                $nbrlignes=$conn->exec($requette);
-                if($nbrlignes==1){
-                    echo"la modification a réussit  ";
-                    $send=$conn->exec($requette);
-                    header("Location:acceuil.php?var=  $id");
-                }
-        }
-
-            $conn = se_connecter("projetsteg");
-			$_SESSION['ref'] = $_GET['var'];
+ $conn = se_connecter("projetsteg");
+ $iddd = $_GET['var'];
+ $_SESSION['ref'] = $_GET['id'];
 			$id = $_SESSION['ref'];
+            $idd = $_GET['var'];
+
+       if (isset($_POST['botton'])) {
+      
+        $nom = $conn->quote($_POST['nom']);
+        $prenom = $conn->quote($_POST['prenom']);
+        $email = $conn->quote($_POST['email']);
+        $tel = $_POST['tel'];
+        $motdepasse = $conn->quote($_POST['pass']);
+        $role = $conn->quote($_POST['role']);
+
+        $requette = "update user set name=$nom, prenom=$prenom, email=$email, tel=$tel, motdepasse=$motdepasse, role=$role where id=$iddd";
+        $nbrlignes = $conn->exec($requette);
+        if ($nbrlignes == 1) {
+            echo "la modification a réussi  ";
+            $send = $conn->exec($requette);
+            header("Location: acceuil.php?var= $id"); // Corrected the variable here
+        }
+       }
+
+           
+			
+
           
-            $req = "select * from user where id= $id";
+            $req = "select * from user where id=   $idd";
             $result = $conn->query($req);
             if (!$result) {
             echo "inexistant !";
@@ -44,6 +45,23 @@
                 $role=$lig->role;
                 
                 }
+
+
+                $req = "select * from user where id=   $id";
+                $result = $conn->query($req);
+                if (!$result) {
+                echo "inexistant !";
+                }
+                else{
+                    $lig=$result->fetchObject();
+                    $nomm=$lig->name;
+                    $prenomm=$lig->prenom;
+                    $emaill=$lig->email;
+                    $tel=$lig->tel;
+                    $pass=$lig->motdepasse;
+                    $role=$lig->role;
+                    
+                    }
  //echo $req;
 ?>
 <!DOCTYPE html>
@@ -161,7 +179,7 @@
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="m-l-5 font-medium d-none d-sm-inline-block"><?php echo $nom.' '.$prenom; ?>  <i class="mdi mdi-chevron-down"></i></span>
+                                <span class="m-l-5 font-medium d-none d-sm-inline-block"><?php echo $nomm.' '.$prenomm; ?>  <i class="mdi mdi-chevron-down"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                 <span class="with-arrow">
@@ -169,8 +187,8 @@
                                 </span>
                                 <div class="d-flex no-block align-items-center p-15 bg-primary text-white m-b-10">
                                     <div class="m-l-10">
-                                        <h10 class="m-b-0"><?php echo $nom.' '.$prenom; ?> </h10>
-                                        <p class=" m-b-0"><?php echo $email ?> </p>
+                                        <h10 class="m-b-0"><?php echo $nomm.' '.$prenomm; ?> </h10>
+                                        <p class=" m-b-0"><?php echo $emaill ?> </p>
                                     </div>
                                 </div>
                                 <div class="profile-dis scrollable">
@@ -244,7 +262,7 @@
                         <div class="card-body">
                                 <h4 class="card-title">modifier un membre
                                 </h4>
-                                <form method='POST' action='modifier.php' >
+                                <form method='POST' >
                                 <div class="form-body">
                                     <div style="padding-top: 0px;" class="card-body">
                                         <div class="row pt-3">
