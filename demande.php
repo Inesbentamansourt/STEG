@@ -318,7 +318,8 @@
                                         <?php                               
                                         if($resultat){
                                             $nbreproduits=$resultat->rowCount();
-                                            $lign=$resultat->fetchObject();                                                            
+                                            $lign=$resultat->fetchObject();   
+                                            if($lign){                                                    
                                             do{
                                                 echo"<tr><td>",$lign->id,
                                                     "</td><td>",utf8_encode($lign->title),"</td><td>",
@@ -334,6 +335,7 @@
                                             $resultat->closeCursor();
                                             $conn=null;
                                             }     
+                                        }     
                                         ?>                
                                         </tbody>
                                     </table>
