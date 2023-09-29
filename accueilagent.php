@@ -223,6 +223,7 @@
                                                 <th scope="col">Nom appareil</th>
                                                 <th scope="col">Marque</th>
                                                 <th scope="col">Date</th>
+                                                <th scope="col">Etat</th>
                                             </tr>
                                         <tbody>
                                         <?php                                    
@@ -236,9 +237,21 @@
                                                 echo"<tr><td>",$ligne->id,
                                                     "</td><td>",utf8_encode($ligne->title),"</td><td>",
                                                     utf8_encode($ligne->desciption),"</td><td>"
-                                                    ,utf8_encode($ligne->nomappareil),"</td><td>",utf8_encode($ligne->marque),"</td><td>",utf8_encode($ligne->date),"</td><tr>";
+                                                    ,utf8_encode($ligne->nomappareil),"</td><td>",utf8_encode($ligne->marque),"</td><td>",utf8_encode($ligne->date),"</td><td>";
+
+                                                                                           
+                                                    // Check the checkbox based on the selected 'etat' from the form
+                                                    if ($ligne->etat == true) {
+                                                        echo '<input style="width: 30px; height: 30px;" type="checkbox" checked />';
+                                                    } else {
+                                                        echo '<input style="width: 30px; height: 30px;" type="checkbox" />';
+                                                    }
+                                                    
+                                                    echo '</td></tr>';
                                             }
+                                           
                                             while( $ligne=$resultat->fetchObject());
+                                            
                                         }   
                                     }   
                                             echo"</table>";

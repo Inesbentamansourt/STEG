@@ -1,11 +1,8 @@
 <?php  
-
     include("connexion.php");                                     
     $conn= se_connecter( "projetsteg");                                   
-   
 
     if($_GET['var']){
-
         $_SESSION['ref'] = $_GET['var'];
         $id = $_SESSION['ref'];
         $req = "select * from user where id= $id";
@@ -17,18 +14,20 @@
         $tel=$lig->tel;
         $pass=$lig->motdepasse;
         $role=$lig->role;
+
     }
-   
-    
+
     $requette="select * from user ";
     $resultat=$conn->query($requette);
-        if(!$resultat){
-                    echo"lecture impossible";
-        }
-    ?>
+    if(!$resultat){
+
+        echo"lecture impossible";
+    }
+?>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-
+    
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -67,8 +66,7 @@
                     <!-- Logo -->
                     <!-- ============================================================== -->
                     <div class="navbar-brand">
-                        <a href="index.html" class="logo">
-                            
+                        <a href="index.html" class="logo">            
                         </a>
                         <a class="sidebartoggler d-none d-md-block" href="javascript:void(0)" data-sidebartype="mini-sidebar">
                             <i class="mdi mdi-toggle-switch mdi-toggle-switch-off font-20"></i>
@@ -145,7 +143,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                 <span class="with-arrow">
-                                    <span class="bg-primary"></span>
+                                       <span class="bg-primary"></span>
                                 </span>
                                 <div class="d-flex no-block align-items-center p-15 bg-primary text-white m-b-10">
                                     <div class="">
@@ -181,21 +179,18 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href='acceuil.php?var=<?php echo $id?>' aria-expanded="false">
                                 <i class="m-r-10 mdi mdi-account"></i>
                                 <span class="hide-menu">Membres</span>
                             </a>
                         </li>
-
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="demande.php?var=<?php echo $id?>" aria-expanded="false">
                                 <i class="mdi mdi-cube-send"></i>
                                 <span class="hide-menu m-l-10">Demandes</span>
                             </a>
                         </li>
-
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -212,8 +207,7 @@
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-               
+            <div class="page-breadcrumb">     
             </div>
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
@@ -228,10 +222,8 @@
                         <div class="card">
                         <div class="card-body">
                                 <h4 style='color:#7A7172' class="card-title">Liste des membres
-
                                 <a href='ajouter.php?var=<?php echo $id?>' style="float:right ; margin-bottom:7px" class="btn btn-primary">ajouter</a>
-                                </h4>
-                                
+                                </h4> 
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -242,7 +234,7 @@
                                                 <th scope="col">Télèphone</th>
                                                 <th scope="col">Email</th>
                                                 <th scope="col">Mot de passe</th>
-                                                <th scope="col">Role</th>
+                                                <th scope="col">Rôle</th>
                                                 <th scope="col">Actions</th>
                                             </tr>
                                         </thead>
@@ -266,13 +258,11 @@
                                             $conn=null;
                                             }     
                                         ?>
-                                 
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                        
+                        </div>   
                     </div>
                 </div>
             </div>
@@ -282,7 +272,6 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-           
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->

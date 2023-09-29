@@ -57,8 +57,8 @@
                     $nomm=$lig->name;
                     $prenomm=$lig->prenom;
                     $emaill=$lig->email;
-                    $tel=$lig->tel;
-                    $pass=$lig->motdepasse;
+                    $telt=$lig->tel;
+                    $passw=$lig->motdepasse;
                     $role=$lig->role;
                     
                     }
@@ -387,5 +387,4 @@
 </body>
 
 </html>
-
 

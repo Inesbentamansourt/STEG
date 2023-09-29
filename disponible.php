@@ -1,10 +1,6 @@
 <?php
-
-    echo"<meta charset='UTF_8'/>";  
-    session_start();                            
+    echo"<meta charset='UTF_8'/>";                              
     include("connexion.php");
-
-    if($_GET['var']){
     $conn= se_connecter( "projetsteg");   
 
     $_SESSION['ref'] = $_GET['var'];
@@ -18,16 +14,20 @@
     $prenom=$lig->prenom;
     $email=$lig->email;
 
-    $requette="select * from demande ";
-    $resultat=$conn->query($requette);
+    if (isset($_POST['botton'])) {
+       $etat = $_POST['disponible'];
+       
+       
+        if ($etat == 'disponible') {
+            $etatt = 1;
+        } elseif ($etat == 'non disponible') {
+            $etatt = 0;
+        }
 
-    
-    $r="select * from user where role= 'Reparateur' and disponible=true";
-    $rr=$conn->query($r);
+        $requette = "UPDATE user SET disponible = $etatt WHERE id = $id";
+        $nbrlignes = $conn->exec($requette);
+    }
 
-}
-
-   
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -52,6 +52,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 </head>
 
 <body>
@@ -135,79 +136,7 @@
                         <!-- ============================================================== -->
                         <!-- Comment -->
                         <!-- ============================================================== -->
-                        <!-- <li class="nav-item dropdown border-right">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="mdi mdi-bell-outline font-22"></i>
-                                <span class="badge badge-pill badge-info noti">3</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
-                                <span class="with-arrow">
-                                    <span class="bg-primary"></span>
-                                </span>
-                                <ul class="list-style-none">
-                                    <li>
-                                        <div class="drop-title bg-primary text-white">
-                                            <h4 class="m-b-0 m-t-5">4 New</h4>
-                                            <span class="font-light">Notifications</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="message-center notifications">
-                                          
-                                            <a href="javascript:void(0)" class="message-item">
-                                                <span class="btn btn-danger btn-circle">
-                                                    <i class="fa fa-link"></i>
-                                                </span>
-                                                <div class="mail-contnet">
-                                                    <h5 class="message-title">Luanch Admin</h5>
-                                                    <span class="mail-desc">Just see the my new admin!</span>
-                                                    <span class="time">9:30 AM</span>
-                                                </div>
-                                            </a>
-                                        
-                                            <a href="javascript:void(0)" class="message-item">
-                                                <span class="btn btn-success btn-circle">
-                                                    <i class="ti-calendar"></i>
-                                                </span>
-                                                <div class="mail-contnet">
-                                                    <h5 class="message-title">Event today</h5>
-                                                    <span class="mail-desc">Just a reminder that you have event</span>
-                                                    <span class="time">9:10 AM</span>
-                                                </div>
-                                            </a>
-                                          
-                                            <a href="javascript:void(0)" class="message-item">
-                                                <span class="btn btn-info btn-circle">
-                                                    <i class="ti-settings"></i>
-                                                </span>
-                                                <div class="mail-contnet">
-                                                    <h5 class="message-title">Settings</h5>
-                                                    <span class="mail-desc">You can customize this template as you want</span>
-                                                    <span class="time">9:08 AM</span>
-                                                </div>
-                                            </a>
-                                           
-                                            <a href="javascript:void(0)" class="message-item">
-                                                <span class="btn btn-primary btn-circle">
-                                                    <i class="ti-user"></i>
-                                                </span>
-                                                <div class="mail-contnet">
-                                                    <h5 class="message-title">Pavan kumar</h5>
-                                                    <span class="mail-desc">Just see the my admin!</span>
-                                                    <span class="time">9:02 AM</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="nav-link text-center m-b-5 text-dark" href="javascript:void(0);">
-                                            <strong>Check all notifications</strong>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> -->
+                       
                         <!-- ============================================================== -->
                         <!-- End Comment -->
                         <!-- ============================================================== -->
@@ -216,16 +145,17 @@
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="m-l-5 font-medium d-none d-sm-inline-block"><?php echo $nom.' '.$prenom; ?> <i class="mdi mdi-chevron-down"></i></span>
+                                <span class="m-l-5 font-medium d-none d-sm-inline-block"><?php echo $nom.' '.$prenom; ?>  <i class="mdi mdi-chevron-down"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                 <span class="with-arrow">
                                     <span class="bg-primary"></span>
                                 </span>
                                 <div class="d-flex no-block align-items-center p-15 bg-primary text-white m-b-10">
-                                 
+                                    <div class="">
+                                    </div>
                                     <div class="m-l-10">
-                                        <h10 class="m-b-0"><?php echo $nom.' '.$prenom; ?></h10>
+                                        <h4 class="m-b-0"><?php echo $nom.' '.$prenom; ?> </h4>
                                         <p class=" m-b-0"><?php echo $email?></p>
                                     </div>
                                 </div>
@@ -256,17 +186,17 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href='acceuil.php?var=<?php echo $id ?>' aria-expanded="false">
-                                <i class="m-r-10 mdi mdi-account"></i>
-                                <span class="hide-menu">Membres</span>
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="reparateur.php?var=<?php echo $id?>" aria-expanded="false">
+                                <i class="mdi mdi-cube-send"></i>
+                                <span class="hide-menu">Demandes</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="demande.php?var=<?php echo $id?>" aria-expanded="false">
-                                <i class="mdi mdi-cube-send"></i>
-                                <span class="hide-menu m-l-10">Demandes</span>
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="disponible.php?var=<?php echo $id?>" aria-expanded="false">
+                                <i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                <span class="hide-menu">disponibilité</span>
                             </a>
-                        </li>  
+                        </li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -283,7 +213,8 @@
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
-            <div class="page-breadcrumb">      
+            <div class="page-breadcrumb">
+               
             </div>
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
@@ -291,108 +222,44 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-            <div class="container-fluid">
+            <span class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <!-- Column -->
                         <div class="card">
                         <div class="card-body">
-                                <h4 class="card-title">Liste des demandes
-                                </h4>
-                                <div class="table-responsive">
-                                    <table  class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Titre</th>
-                                                <th scope="col">Description</th>
-                                                <th scope="col">Nom appareil</th>
-                                                <th scope="col">Marque</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Agent</th>
-                                                <th scope="col">Réparateur</th>
-                                                <th scope="col">Choisir un réparateur</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                        if ($resultat) {
-                                        $nbreproduits = $resultat->rowCount();
-                                        $ligne = $resultat->fetchObject();
-
-                                        if ($ligne) {
-                                            
-                                            // Fetch and loop through users outside of the demand loop
-                                            $users = []; // Store users
-                                            if ($rr) {
-                                                while ($row = $rr->fetchObject()) {
-                                                    $users[] = $row;
-                                                }
-                                            }
-
-                                            do {
-                                                echo"<tr><td>",$ligne->id,
-                                                "</td><td>",utf8_encode($ligne->title),"</td><td>",
-                                                utf8_encode($ligne->desciption),"</td><td>"
-                                                ,utf8_encode($ligne->nomappareil),"</td><td>",utf8_encode($ligne->marque),"</td><td>",utf8_encode($ligne->date),
-                                                "</td><td>",utf8_encode($ligne->idagent),"</td><td>",utf8_encode($ligne->reparateur),
-                                                
-                                                "</td><td style='
-                                                height: 43px;
-                                                width: 232px;'
-                                                >";
-
-                                                echo "<form  method='post'>";
-
-                                                echo "<input type='hidden' name='id' value='" . $ligne->id . "'>";
-                                                echo" <div class='row'><div class='col-6'><select name='reparateur' class='form-control custom-select'>";
-                                                echo "<option disabled autofocus>--Sélectionner un réparateur--</option>";
-
-                                                foreach ($users as $user) {
-                                                    
-                                                    echo '<option value="' . $user->id . '">' . $user->name . ' ' . $user->prenom . '</option>';
-                                                }
-
-                                                echo "</select> </div>";
-                                                echo "<div class='col-6'><button name='botton' type='submit' class='btn btn-success'>Enregistrer</button></div>";
-
-                                                echo "</form>";
-                                                echo "</td></tr>";
-                                                if(isset($_POST['botton']))
-                                                {                      
-                                                        $reparateur=$_POST['reparateur'];
-                                                        $id = $_POST['id'];
-                                                                            
-
-                                                        $requette="update demande set reparateur=$reparateur where id= $id";
-                                                        $nbrlignes=$conn->exec($requette);
-                                                        
-                                                }
-                                            } while ($ligne = $resultat->fetchObject());
-
-                                            echo "</table>";
-
-                                            $resultat->closeCursor();
-                                            $conn = null;
-                                        }
-                                        }
-                                        ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <h4 class="card-title">changer votre disponiblité
+                                </h4>            
+                            <p> Etes vous disponible ?</p>
+                            <form action="disponible.php?var=<?php echo $id ;?>"  method="post" >
+                            <div class="row">
+                            <div class="col-10">
+                            
+                            <select height="5px" name="disponible" class="form-control custom-select">                            
+                            <option>disponible</option>';
+                            <option>non disponible</option>';
+                                
+                            </select>
                             </div>
+
+                            <div class="col-2 ">
+                                <button name="botton" type="submit" class="btn btn-success">Enregistrer</button>
+                            </div>
+                            </div>
+                            </form>
+                    </div>
                         </div>
                         
                     </div>
                 </div>
-            </div>
+            </span>
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-           
+        
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->
@@ -401,13 +268,14 @@
         <!-- End Page wrapper  -->
         <!-- ============================================================== -->
     </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- customizer Panel -->
-    <!-- ============================================================== -->
-    <div class="chat-windows"></div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- customizer Panel -->
+<!-- ============================================================== -->
+                                                    
+   
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->

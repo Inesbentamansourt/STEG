@@ -14,7 +14,7 @@
     $prenom=$lig->prenom;
     $email=$lig->email;
 
-    $requette="select * from demande ";
+    $requette="select * from demande where reparateur = $id";
     $resultat=$conn->query($requette);
 ?>
 <!DOCTYPE html>
@@ -178,7 +178,12 @@
                                 <span class="hide-menu">Demandes</span>
                             </a>
                         </li>
-
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="disponible.php?var=<?php echo $id?>" aria-expanded="false">
+                                <i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                <span class="hide-menu">disponibilité</span>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -223,7 +228,7 @@
                                                 <th scope="col">Marque</th>
                                                 <th scope="col">Date</th>
                                                 <th scope="col">Etat</th>
-                                                <th scope="col">etat</th>
+                                                <th scope="col">Statut</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -231,6 +236,7 @@
                                         if ($resultat) {
                                             $nbreproduits = $resultat->rowCount();
                                             $ligne = $resultat->fetchObject();
+                                            if ($ligne) {
                                         
                                             do {
                                                 echo "<tr><td>", utf8_encode($ligne->id),
@@ -284,6 +290,7 @@
                                                 $nbrlignes = $conn->exec($requette);
                                             }
                                         }
+                                    }
                                         ?>
                                         </tbody>
                                     </table>
